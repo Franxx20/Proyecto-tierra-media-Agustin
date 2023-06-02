@@ -18,6 +18,14 @@ public abstract class Oferta {
 	public abstract String getNombre();
 	public abstract boolean hayCupo();
 	public abstract void reducirCupo();
-	public abstract double getCosto();
+	public abstract int getCosto();
 	public abstract double getTiempo();
+
+	public boolean esPromo(){
+		return false;
+	}
+
+	public abstract TipoDeAtraccion getTipo();
+
+
 }

@@ -38,4 +38,17 @@ public abstract class Promocion extends Oferta{
 	private TipoDeAtraccion calcularTipoDeAtraccion() {
 		return this.atracciones.get(0).tipo;
 	}
+
+	@Override
+	public boolean esPromo(){
+		return true;
+	}
+
+	@Override
+	public TipoDeAtraccion getTipo(){
+		if (!atracciones.isEmpty())
+			return this.atracciones.get(0).getTipo();
+
+			return null;
+	}
 }

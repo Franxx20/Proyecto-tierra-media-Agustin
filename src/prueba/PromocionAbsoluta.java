@@ -27,7 +27,7 @@ public class PromocionAbsoluta extends Promocion {
 	}
 
 	@Override
-	public double getCosto() {
+	public int getCosto() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
