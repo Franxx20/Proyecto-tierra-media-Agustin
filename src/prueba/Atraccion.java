@@ -11,19 +11,24 @@ public class Atraccion extends Oferta {
 	}
 
 	@Override
+	public String toString() {
+		return "Atraccion [nombre=" + this.nombre + ", costo=" + this.costo + ", tiempoRequerido=" + this.tiempo + ", cupo="+ cupo + ", tipo=" + this.tipo + "]";
+	}
+	
+	@Override
 	public String getNombre() {
 		return this.nombre;
 	}
 
 	@Override
 	public boolean hayCupo() {
-		// TODO Auto-generated method stub
-		return false;
+
+		return this.cupo > 0;
 	}
 
 	@Override
 	public void reducirCupo() {
-		// TODO Auto-generated method stub
+		this.cupo--;
 		
 	}
 
