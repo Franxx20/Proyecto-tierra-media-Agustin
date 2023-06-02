@@ -15,6 +15,8 @@ public class Atraccion extends Oferta {
 		return "Atraccion [nombre=" + this.nombre + ", costo=" + this.costo + ", tiempoRequerido=" + this.tiempo + ", cupo="+ cupo + ", tipo=" + this.tipo + "]";
 	}
 	
+	
+	
 	@Override
 	public String getNombre() {
 		return this.nombre;
