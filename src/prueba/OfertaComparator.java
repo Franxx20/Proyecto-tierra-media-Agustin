@@ -44,11 +44,11 @@ public class OfertaComparator implements Comparator<Oferta> {
     }
 
     private boolean ambosSonDelTipoDelCliente(Oferta o1, Oferta o2) {
-        return o1.getTipo() == this.tipoDelCliente && o2.getTipo() == this.tipoDelCliente);
+        return o1.getTipo() == this.tipoDelCliente && o2.getTipo() == this.tipoDelCliente;
     }
 
     private boolean ningunoEsDelTipoDelCliente(Oferta o1, Oferta o2) {
-        return o1.getTipo() != this.tipoDelCliente && o2.getTipo() != this.tipoDelCliente);
+        return o1.getTipo() != this.tipoDelCliente && o2.getTipo() != this.tipoDelCliente;
     }
 
     private boolean ambosSonPromocion(Oferta o1, Oferta o2) {
@@ -57,19 +57,6 @@ public class OfertaComparator implements Comparator<Oferta> {
 
     private boolean ningunoEsPromocion(Oferta o1, Oferta o2) {
         return !o1.esPromo() && !o2.esPromo();
-    }
-
-    private int compararTiempo(Oferta o1, Oferta o2) {
-        return Double.compare(o1.getTiempo(), o2.getTiempo());
-    }
-
-
-    private int compararCosto(Oferta o1, Oferta o2) {
-        return Integer.compare(o1.getCosto(), o2.getCosto());
-    }
-
-    private int compararPromo(Oferta o1, Oferta o2) {
-        return Boolean.compare(o1.esPromo(), o2.esPromo());
     }
 
     private int compararContraTipoDelCliente(Oferta o1, Oferta o2) {
