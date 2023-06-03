@@ -1,25 +1,26 @@
 package prueba;
 
 public class Atraccion extends Oferta {
-    private final String nombre;
-    private int cupo;
+	private final String nombre;
+	private int cupo;
 
-    public Atraccion(String nombre, int costo, double tiempo, int cupo, TipoDeAtraccion tipo) {
-        super(tipo, costo, tiempo);
-        this.nombre = nombre;
-        this.cupo = cupo;
-    }
+	public Atraccion(String nombre, int costo, double tiempo, int cupo, TipoDeAtraccion tipo) {
+		super(tipo, costo, tiempo);
+		this.nombre = nombre;
+		this.cupo = cupo;
+	}
 
 	@Override
 	public String toString() {
-		return "Atraccion [nombre=" + this.nombre + ", costo=" + this.costo + ", tiempoRequerido=" + this.tiempo + ", cupo="+ cupo + ", tipo=" + this.tipo + "]";
+		return "Atraccion [nombre=" + this.nombre + ", costo=" + this.costo + ", tiempoRequerido=" + this.tiempo
+				+ ", cupo=" + cupo + ", tipo=" + this.tipo + "]";
 	}
-	
+
 	@Override
 	public String getNombre() {
 		return this.nombre;
 	}
-  
+
 	@Override
 	public boolean hayCupo() {
 		return this.cupo > 0;
@@ -30,15 +31,15 @@ public class Atraccion extends Oferta {
 		this.cupo--;
 	}
 
-  @Override
-  public int getCosto() {
-      return this.costo;
-  }
+	@Override
+	public int getCosto() {
+		return this.costo;
+	}
 
-  @Override
-  public double getTiempo() {
-      return this.tiempo;
-  }
+	@Override
+	public double getTiempo() {
+		return this.tiempo;
+	}
 
 	@Override
 	public TipoDeAtraccion getTipo() {
