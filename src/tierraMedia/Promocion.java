@@ -1,4 +1,4 @@
-package prueba;
+package tierraMedia;
 
 import java.util.List;
 
@@ -20,11 +20,11 @@ public abstract class Promocion extends Oferta {
 	protected abstract int calcularCosto();
 
 	private int calcularCostoOriginal() {
-		int costoOriginal = 0;
+		int costoTotal = 0;
 		for (Oferta a : this.atracciones) {
-			costoOriginal += a.getCosto();
+			costoTotal += a.getCosto();
 		}
-		return costoOriginal;
+		return costoTotal;
 	}
 
 	private double calcularTiempo() {

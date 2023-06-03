@@ -1,9 +1,9 @@
-package prueba;
+package tierraMedia;
 
 import java.util.Comparator;
 
 public class OfertaComparator implements Comparator<Oferta> {
-    private TipoDeAtraccion tipoDelCliente;
+    private final TipoDeAtraccion tipoDelCliente;
 
     public OfertaComparator(TipoDeAtraccion tipo) {
         this.tipoDelCliente = tipo;

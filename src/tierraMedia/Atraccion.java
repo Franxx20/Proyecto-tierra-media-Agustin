@@ -1,4 +1,4 @@
-package prueba;
+package tierraMedia;
 
 public class Atraccion extends Oferta {
 	private final String nombre;

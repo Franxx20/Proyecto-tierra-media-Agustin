@@ -1,4 +1,4 @@
-package prueba;
+package tierraMedia;
 
 public abstract class Oferta {
 	protected TipoDeAtraccion tipo;
