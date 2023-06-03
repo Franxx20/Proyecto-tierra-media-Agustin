@@ -9,73 +9,80 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Archivo {
-	private String nombre;
+    private static final String EXTENSION = ".in";
+    private static final String PATH = "archivos/in/";
+    final private String nombre;
 
-	public Archivo(String nombre) {
-		this.nombre = nombre;
-	}
 
-	public List<Usuario> leerArchivoUsuario() {
-		List<Usuario> listaDeUsuarios = new ArrayList<Usuario>();
+    public Archivo(String nombre) {
+        this.nombre = nombre;
+    }
 
-		try (Scanner scanner = new Scanner(new File("archivos/in/" + this.nombre + ".in"))) {
-			scanner.useLocale(Locale.ENGLISH);
-			while (scanner.hasNextLine()) {
-				listaDeUsuarios.add(new Usuario(scanner.next().replace('-', ' '),
-						TipoDeAtraccion.valueOf(scanner.next().toUpperCase()), scanner.nextInt(),
-						scanner.nextDouble()));
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+    public List<Usuario> leerArchivoUsuario() {
+        List<Usuario> listaDeUsuarios = new ArrayList<>();
 
-		return listaDeUsuarios;
-	}
+        try (Scanner scanner = new Scanner(new File(PATH + this.nombre + EXTENSION))) {
+            scanner.useLocale(Locale.ENGLISH);
+            while (scanner.hasNextLine()) {
+                listaDeUsuarios.add(new Usuario(scanner.next().replace('-', ' '),
+                        TipoDeAtraccion.valueOf(scanner.next().toUpperCase()), scanner.nextInt(),
+                        scanner.nextDouble()));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-	public Map<String, Atraccion> leerArchivoAtraccion() {
-		Map<String, Atraccion> mapaDeAtracciones = new HashMap<>();
+        return listaDeUsuarios;
+    }
 
-		try (Scanner scanner = new Scanner(new File("archivos/in/" + this.nombre + ".in"))) {
-			scanner.useLocale(Locale.ENGLISH);
-			while (scanner.hasNextLine()) {
-				String nombre = scanner.next().replace('-', ' ');
-				mapaDeAtracciones.put(nombre, new Atraccion(nombre, scanner.nextInt(), scanner.nextDouble(),
-						scanner.nextInt(), TipoDeAtraccion.valueOf(scanner.next().toUpperCase())));
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+    public Map<String, Atraccion> leerArchivoAtraccion() {
+        Map<String, Atraccion> mapaDeAtracciones = new HashMap<>();
 
-		return mapaDeAtracciones;
-	}
+        try (Scanner scanner = new Scanner(new File(PATH + this.nombre + EXTENSION))) {
+            scanner.useLocale(Locale.ENGLISH);
+            while (scanner.hasNextLine()) {
+                String nombreAtraccion = scanner.next().replace('-', ' ');
+                mapaDeAtracciones.put(nombreAtraccion, new Atraccion(nombreAtraccion, scanner.nextInt(), scanner.nextDouble(),
+                        scanner.nextInt(), TipoDeAtraccion.valueOf(scanner.next().toUpperCase())));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-	public List<Promocion> leerArchivoPromocion(Map<String, Atraccion> atraccion) {
-		List<Promocion> listaDePromociones = new ArrayList<Promocion>();
+        return mapaDeAtracciones;
+    }
 
-		try (Scanner scanner = new Scanner(new File("archivos/in/" + this.nombre + ".in"))) {
-			scanner.useLocale(Locale.ENGLISH);
-			while (scanner.hasNextLine()) {
-				String[] campos = scanner.nextLine().split(" ");
-				int j = 0;
-				TipoDePromocion tipo = TipoDePromocion.valueOf(campos[j++]);
-				int valor = Integer.parseInt(campos[j++]);
-				List<Oferta> atraccionPromo = new ArrayList<Oferta>();
-				while (j < campos.length) {
-					String nombre = campos[j++].replace('-', ' ');
-					atraccionPromo.add(atraccion.get(nombre));
-				}
-				if (tipo == TipoDePromocion.ABS) {
-					listaDePromociones.add(new PromocionAbsoluta(atraccionPromo, valor));
-				} else if (tipo == TipoDePromocion.PER) {
-					listaDePromociones.add(new PromocionPorcentual(atraccionPromo, valor));
-				} else {
-					listaDePromociones.add(new PromocionAXB(atraccionPromo, valor));
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+    public List<Promocion> leerArchivoPromocion(Map<String, Atraccion> atraccion) {
+        List<Promocion> listaDePromociones = new ArrayList<>();
 
-		return listaDePromociones;
-	}
+        try (Scanner scanner = new Scanner(new File(PATH + this.nombre + EXTENSION))) {
+            scanner.useLocale(Locale.ENGLISH);
+            while (scanner.hasNextLine()) {
+                String[] campos = scanner.nextLine().split(" ");
+                int j = 0;
+                TipoDePromocion tipo = TipoDePromocion.valueOf(campos[j++]);
+                int valor = Integer.parseInt(campos[j++]);
+                List<Oferta> atraccionPromo = new ArrayList<>();
+                while (j < campos.length) {
+                    String nombreAtraccion = campos[j++].replace('-', ' ');
+                    atraccionPromo.add(atraccion.get(nombreAtraccion));
+                }
+                if (tipo == TipoDePromocion.ABS) {
+                    listaDePromociones.add(new PromocionAbsoluta(atraccionPromo, valor));
+                } else if (tipo == TipoDePromocion.PER) {
+                    listaDePromociones.add(new PromocionPorcentual(atraccionPromo, valor));
+                } else {
+                    listaDePromociones.add(new PromocionAXB(atraccionPromo, valor));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return listaDePromociones;
+    }
+
+    public void guardarArchivo(List<Oferta> listaDeOfertas) {
+        // TODO
+    }
 }

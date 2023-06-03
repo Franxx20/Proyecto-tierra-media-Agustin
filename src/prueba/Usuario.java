@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.LinkedList;
 
 public class Usuario {
-	private String nombre;
-	TipoDeAtraccion preferencia;
+	private final String nombre;
+	final TipoDeAtraccion preferencia;
 	private int tiempoDisponible;
 	private double dineroDisponible;
 	private List<Oferta> itenerario;
