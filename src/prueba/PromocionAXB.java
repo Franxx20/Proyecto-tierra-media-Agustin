@@ -8,7 +8,6 @@ public class PromocionAXB extends Promocion{
 		super(atracciones, lugarADescontar);
 	}
 
-	@Override
 	protected int calcularCosto() {
 		if(this.valor < 1 || this.valor > this.atracciones.size()) {
 			throw new RuntimeException();
@@ -16,5 +15,4 @@ public class PromocionAXB extends Promocion{
 		Oferta a = this.atracciones.get(this.valor-1);
 		return this.costoOriginal - a.costo;
 	}
-
 }
