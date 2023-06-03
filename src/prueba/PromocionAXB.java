@@ -8,31 +8,6 @@ public class PromocionAXB extends Promocion{
 		super(atracciones, lugarADescontar);
 	}
 
-	@Override
-	public String getNombre() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public boolean hayCupo() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public void reducirCupo() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public int getCosto() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
 	protected int calcularCosto() {
 		if(this.valor < 1 || this.valor > this.atracciones.size()) {
 			throw new RuntimeException();
@@ -40,13 +15,4 @@ public class PromocionAXB extends Promocion{
 		Oferta a = this.atracciones.get(this.valor-1);
 		return this.costoOriginal - a.costo;
 	}
-
-	@Override
-	public double getTiempo() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	
-
 }

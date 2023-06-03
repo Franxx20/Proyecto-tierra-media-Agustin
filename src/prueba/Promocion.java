@@ -49,6 +49,38 @@ public abstract class Promocion extends Oferta{
 		if (!atracciones.isEmpty())
 			return this.atracciones.get(0).getTipo();
 
-			return null;
+    return null;
+  }
+
+	public void reducirCupo() {
+		for(Oferta a : this.atracciones) {
+			a.reducirCupo(); 
+		}
+	}
+  
+	@Override
+	public double getCosto() {
+		
+		return this.costo;
+	}
+  
+	@Override
+	public double getTiempo() {
+		// TODO Auto-generated method stub
+		return this.tiempo;
+	}
+	
+	@Override
+	public boolean hayCupo() {
+		boolean ban=true;
+		for(Oferta a : this.atracciones) {
+			if(!a.hayCupo())
+				ban=false;
+		}
+		return ban;
+	}
+	@Override
+	public String getNombre() {
+		return this.atracciones.toString();
 	}
 }
