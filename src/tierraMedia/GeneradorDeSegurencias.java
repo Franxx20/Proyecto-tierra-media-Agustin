@@ -1,4 +1,4 @@
-package prueba;
+package tierraMedia;
 
 import java.util.LinkedList;
 import java.util.List;
