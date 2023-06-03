@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 public class GeneradorDeSegurencias {
+		@SuppressWarnings("unused")
 		private List<Usuario> listaDeUsuarios;
 		private List<Oferta> listaDeOfertas;
 		private String archivoUsuarios;

@@ -1,7 +1,7 @@
 package prueba;
 
 public class Atraccion extends Oferta {
-    private String nombre;
+    private final String nombre;
     private int cupo;
 
     public Atraccion(String nombre, int costo, double tiempo, int cupo, TipoDeAtraccion tipo) {
@@ -19,11 +19,6 @@ public class Atraccion extends Oferta {
 	public String getNombre() {
 		return this.nombre;
 	}
-
-  @Override
-  public String getNombre() {
-      return this.nombre;
-  }
   
 	@Override
 	public boolean hayCupo() {

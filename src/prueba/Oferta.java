@@ -26,6 +26,4 @@ public abstract class Oferta {
 	}
 
 	public abstract TipoDeAtraccion getTipo();
-
-
 }

@@ -46,10 +46,7 @@ public abstract class Promocion extends Oferta{
 
 	@Override
 	public TipoDeAtraccion getTipo(){
-		if (!atracciones.isEmpty())
-			return this.atracciones.get(0).getTipo();
-
-    return null;
+		return this.atracciones.get(0).getTipo();
   }
 
 	public void reducirCupo() {
@@ -59,14 +56,12 @@ public abstract class Promocion extends Oferta{
 	}
   
 	@Override
-	public double getCosto() {
-		
+	public int getCosto() {
 		return this.costo;
 	}
   
 	@Override
 	public double getTiempo() {
-		// TODO Auto-generated method stub
 		return this.tiempo;
 	}
 	
@@ -79,6 +74,7 @@ public abstract class Promocion extends Oferta{
 		}
 		return ban;
 	}
+	
 	@Override
 	public String getNombre() {
 		return this.atracciones.toString();
