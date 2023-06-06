@@ -1,6 +1,5 @@
 package tierraMedia;
 
-import java.nio.file.attribute.UserDefinedFileAttributeView;
 import java.util.*;
 
 public class GeneradorDeSegurencias {
@@ -14,7 +13,7 @@ public class GeneradorDeSegurencias {
 
     public void generarSugerencias() {
 
-        HashSet<Oferta> ofertasYaSugeridas = new HashSet<Oferta>();
+        HashSet<Oferta> ofertasYaSugeridas = new HashSet<>();
         Scanner sc = new Scanner(System.in);
         boolean tieneDineroYTiempo = true;
 
@@ -38,11 +37,8 @@ public class GeneradorDeSegurencias {
                         tieneDineroYTiempo = true;
 
                     if (tieneTiempoYDineroYNoOfertada(usuario, yaOfertado, tiempoNecesario, dineroNecesario)
-                            && oferta.hayCupo()) {
-
-                        if (ofrecer(oferta, sc))
-                            aceptarOferta(ofertasYaSugeridas, usuario, oferta, tiempoNecesario, dineroNecesario);
-
+                            && oferta.hayCupo() && ofrecer(oferta, sc)) {
+                        aceptarOferta(ofertasYaSugeridas, usuario, oferta, tiempoNecesario, dineroNecesario);
                     }
 
                 }
@@ -65,7 +61,7 @@ public class GeneradorDeSegurencias {
     }
 
     private boolean ofrecer(Oferta oferta, Scanner sc) {
-        String respuesta = new String();
+        String respuesta;
         System.out.println(oferta);
         do {
             System.out.println("Acepta la oferta? S/N\n");
@@ -127,11 +123,6 @@ public class GeneradorDeSegurencias {
 
     private boolean respuestaValida(String respuesta) {
         return !respuesta.equals("S") && !respuesta.equals("N") && !respuesta.equals("s") && !respuesta.equals("n");
-    }
-
-    public void leerAtraccionesPromocionesYUsuarios() {
-
-
     }
 
     private void guardarItinerariosDeUsuarios() {

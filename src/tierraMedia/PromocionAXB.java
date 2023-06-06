@@ -10,7 +10,7 @@ public class PromocionAXB extends Promocion {
 
     protected int calcularCosto() {
         if (this.valor < 1 || this.valor > this.atracciones.size()) {
-            throw new RuntimeException();
+            throw new RuntimeException("el valor no puede ser negativo");
         }
         Oferta a = this.atracciones.get(this.valor - 1);
         return this.costoOriginal - a.costo;

@@ -13,7 +13,7 @@ import java.util.HashMap;
 public class Archivo {
     private static final String EXTENSION = ".in";
     private static final String PATH = "archivos/in/";
-    final private String nombre;
+    private final String nombre;
 
     public Archivo(String nombre) {
         this.nombre = nombre;
