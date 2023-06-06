@@ -4,119 +4,114 @@ import java.util.List;
 import java.util.Objects;
 
 public abstract class Promocion extends Oferta {
+	protected List<Atraccion> atracciones;
+	protected int costoOriginal;
+	protected int valor;
 
-    protected List<Atraccion> atracciones;
-    protected int costoOriginal;
-    protected int valor;
+	protected Promocion(List<Atraccion> atracciones, int valor) {
+		super();
+		this.valor = valor;
+		this.atracciones = atracciones;
+		this.costoOriginal = calcularCostoOriginal();
+		this.costo = calcularCosto();
+		this.tiempo = calcularTiempo();
+		this.tipo = calcularTipoDeAtraccion();
+	}
 
-    protected Promocion(List<Atraccion> atracciones, int valor) {
-        super();
-        this.valor = valor;
-        this.atracciones = atracciones;
-        this.costoOriginal = calcularCostoOriginal();
-        this.costo = calcularCosto();
-        this.tiempo = calcularTiempo();
-        this.tipo = calcularTipoDeAtraccion();
-    }
+	protected abstract int calcularCosto();
 
-    protected abstract int calcularCosto();
+	@Override
+	public boolean esPromo() {
+		return true;
+	}
 
-    private int calcularCostoOriginal() {
-        int costoTotal = 0;
-        for (Atraccion a : this.atracciones) {
-            costoTotal += a.getCosto();
-        }
-        return costoTotal;
-    }
+	@Override
+	public TipoDeAtraccion getTipo() {
+		return this.atracciones.get(0).getTipo();
+	}
 
-    private double calcularTiempo() {
-        double tiempoTotal = 0;
-        for (Atraccion a : this.atracciones) {
-            tiempoTotal += a.getTiempo();
-        }
-        return tiempoTotal;
-    }
+	public void reducirCupo() {
+		for (Atraccion a : this.atracciones) {
+			a.reducirCupo();
+		}
+	}
 
-    private TipoDeAtraccion calcularTipoDeAtraccion() {
-        return this.atracciones.get(0).tipo;
-    }
+	@Override
+	public int getCosto() {
+		return this.costo;
+	}
 
-    @Override
-    public boolean esPromo() {
-        return true;
-    }
+	@Override
+	public double getTiempo() {
+		return this.tiempo;
+	}
 
-    @Override
-    public TipoDeAtraccion getTipo() {
-        return this.atracciones.get(0).getTipo();
-    }
+	@Override
+	public boolean hayCupo() {
+		boolean ban = true;
+		for (Atraccion a : this.atracciones) {
+			if (!a.hayCupo())
+				ban = false;
+		}
+		return ban;
+	}
 
-    public void reducirCupo() {
-        for (Atraccion a : this.atracciones) {
-            a.reducirCupo();
-        }
-    }
+	@Override
+	public String getNombre() {
+		String nombres = "";
 
-    @Override
-    public int getCosto() {
-        return this.costo;
-    }
+		for (Atraccion a : this.atracciones) {
+			nombres += a.getNombre() + ", ";
+		}
 
-    @Override
-    public double getTiempo() {
-        return this.tiempo;
-    }
+		return nombres.substring(0, nombres.length() - 2);
+	}
 
-    @Override
-    public boolean hayCupo() {
-        boolean ban = true;
-        for (Atraccion a : this.atracciones) {
-            if (!a.hayCupo())
-                ban = false;
-        }
-        return ban;
-    }
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + Objects.hash(atracciones, costoOriginal, valor);
+		return result;
+	}
 
-    @Override
-    public String getNombre() {
-        String nombres = "";
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Promocion other = (Promocion) obj;
+		return Objects.equals(atracciones, other.atracciones) && costoOriginal == other.costoOriginal
+				&& valor == other.valor;
+	}
 
-        for (Atraccion a :
-                this.atracciones) {
-            nombres += a.getNombre() + ", ";
-        }
+	@Override
+	public String toString() {
+		return "Promocion\n" + "-Atracciones incluidas: [" + this.getNombre() + "]" + "\n-Duracion: " + this.getTiempo()
+				+ " horas" + "\n-Precio Original: $" + this.costoOriginal + "\n-Precio con descuento: $"
+				+ this.getCosto() + "\n";
+	}
 
-        return nombres.substring(0, nombres.length() - 2);
-    }
+	private int calcularCostoOriginal() {
+		int costoTotal = 0;
+		for (Atraccion a : this.atracciones) {
+			costoTotal += a.getCosto();
+		}
+		return costoTotal;
+	}
 
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = super.hashCode();
-        result = prime * result + Objects.hash(atracciones, costoOriginal, valor);
-        return result;
-    }
+	private double calcularTiempo() {
+		double tiempoTotal = 0;
+		for (Atraccion a : this.atracciones) {
+			tiempoTotal += a.getTiempo();
+		}
+		return tiempoTotal;
+	}
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (!super.equals(obj))
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        Promocion other = (Promocion) obj;
-        return Objects.equals(atracciones, other.atracciones) && costoOriginal == other.costoOriginal
-                && valor == other.valor;
-    }
-
-
-    @Override
-    public String toString() {
-        return "Promocion\n" +
-                "-Atracciones incluidas: [" + this.getNombre() + "]" +
-                "\n-Duracion: " + this.getTiempo() + " horas" +
-                "\n-Precio Original: $" + this.costoOriginal +
-                "\n-Precio con descuento: $" + this.getCosto() + "\n";
-    }
+	private TipoDeAtraccion calcularTipoDeAtraccion() {
+		return this.atracciones.get(0).tipo;
+	}
 }
