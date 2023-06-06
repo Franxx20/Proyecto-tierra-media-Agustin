@@ -1,15 +1,7 @@
 package tierraMedia;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-import java.util.Collections;
-import java.util.HashSet;
-
-import java.util.Scanner;
+import java.nio.file.attribute.UserDefinedFileAttributeView;
+import java.util.*;
 
 public class GeneradorDeSegurencias {
 
@@ -63,8 +55,10 @@ public class GeneradorDeSegurencias {
 
             ofertasYaSugeridas.clear();
 
+            usuario.ordenarItenerario(new OfertaComparator(usuario.getPreferencia()));
+
             System.out.println("Itinerario de " + usuario.getNombre() + "\n");
-            System.out.println(usuario.getItinerario());
+            System.out.println(usuario.mostrarItinerario());
 
             tieneDineroYTiempo = true;
         }
@@ -111,7 +105,7 @@ public class GeneradorDeSegurencias {
     private void aceptarOferta(HashSet<Oferta> ofertasYaSugeridas, Usuario usuario, Oferta oferta,
                                double tiempoNecesario, int dineroNecesario) {
 
-        System.out.println("Acepto la oferta!");
+        System.out.println("Acepto la oferta!\n");
 
         usuario.agregarAItinerario(oferta);
 
@@ -157,9 +151,12 @@ public class GeneradorDeSegurencias {
 
     public void guardarItinerariosDeUsuarios() {
 
-        Archivo archivoFinal = new Archivo("SALIDA");
+        for (Usuario u : this.listaDeUsuarios) {
+            Archivo archivoSalida = new Archivo(u.getNombre());
 
-        archivoFinal.guardarArchivo(listaDeUsuarios);
+            archivoSalida.guardarArchivo(u);
+        }
+
     }
 
 

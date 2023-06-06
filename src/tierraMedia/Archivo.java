@@ -84,19 +84,11 @@ public class Archivo {
         return listaDePromociones;
     }
 
-    public void guardarArchivo(List<Usuario> listaDeUsuarios) {
-
+    public void guardarArchivo(Usuario usuario) {
         File fileName = new File("archivos/out/" + this.nombre + ".out");
         try (PrintWriter printer = new PrintWriter(fileName)) {
-
-            for (Usuario usuario : listaDeUsuarios) {
-                printer.println(usuario.getNombre() + " " + usuario.getPreferencia()+ "\n");
-                printer.println();
-            }
-
-        }
-
-        catch (FileNotFoundException e) {
+            printer.println(usuario + usuario.mostrarItinerario());
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
     }

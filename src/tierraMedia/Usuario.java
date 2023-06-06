@@ -4,75 +4,87 @@ import java.util.List;
 import java.util.LinkedList;
 
 public class Usuario {
-	private final String nombre;
-	final TipoDeAtraccion preferencia;
-	private int tiempoDisponible;
-	private double dineroDisponible;
-	private List<Oferta> itinerario;
+    private final String nombre;
+    final TipoDeAtraccion preferencia;
+    private int tiempoDisponible;
+    private double dineroDisponible;
+    private List<Oferta> itinerario;
 
-	public Usuario(String nombre, TipoDeAtraccion preferencia, int tiempoDisponible, double dineroDisponible) {
-		this.nombre = nombre;
-		this.preferencia = preferencia;
-		this.tiempoDisponible = tiempoDisponible;
-		this.dineroDisponible = dineroDisponible;
-		this.itinerario = new LinkedList<>();
-	}
+    public Usuario(String nombre, TipoDeAtraccion preferencia, int tiempoDisponible, double dineroDisponible) {
+        this.nombre = nombre;
+        this.preferencia = preferencia;
+        this.tiempoDisponible = tiempoDisponible;
+        this.dineroDisponible = dineroDisponible;
+        this.itinerario = new LinkedList<>();
+    }
 
-	public String getNombre() {
-		return nombre;
-	}
+    public String getNombre() {
+        return nombre;
+    }
 
-	@Override
-	public String toString() {
-		return "Usuario [nombre=" + nombre + ", preferencia=" + preferencia + ", itinerario= " + itinerario +"]\n";
-	}
+    @Override
+    public String toString() {
+        return "Usuario nombre=" + nombre + ", preferencia=" + preferencia + "\n\n";
+    }
 
-	public TipoDeAtraccion getPreferencia() {
-		return preferencia;
-	}
+    public TipoDeAtraccion getPreferencia() {
+        return preferencia;
+    }
 
-	public int getTiempoDisponible() {
-		return tiempoDisponible;
-	}
+    public int getTiempoDisponible() {
+        return tiempoDisponible;
+    }
 
-	public double getDineroDisponible() {
-		return dineroDisponible;
-	}
+    public double getDineroDisponible() {
+        return dineroDisponible;
+    }
 
-	public List<Oferta> getItinerario() {
-		return itinerario;
-	}
+    public String mostrarItinerario() {
+        String itenerario = "";
 
-	public void agregarAItinerario(Oferta oferta) {
-		this.itinerario.add(oferta);
-	}
+        for (Oferta o : this.itinerario) {
+            itenerario += o.toString() + "\n";
+        }
 
-	public double getTiempoTotal() {
-		double tiempoTotal = 0;
+        itenerario += "Tiempo de duracion total: " + this.getTiempoTotal() + " horas\n"
+                + "Precio total a pagar: $" + this.getCostoTotal() + "\n";
 
-		for (Oferta oferta : itinerario) {
-			tiempoTotal += oferta.getTiempo();
-		}
+        return itenerario;
+    }
 
-		return tiempoTotal;
-	}
+    public void agregarAItinerario(Oferta oferta) {
+        this.itinerario.add(oferta);
+    }
 
-	public int getCostoTotal() {
-		int costoTotal = 0;
+    public double getTiempoTotal() {
+        double tiempoTotal = 0;
 
-		for (Oferta oferta : itinerario) {
-			costoTotal += oferta.getCosto();
-		}
+        for (Oferta oferta : itinerario) {
+            tiempoTotal += oferta.getTiempo();
+        }
 
-		return costoTotal;
-	}
+        return tiempoTotal;
+    }
 
-	public void reducirTiempo(double tiempo) {
-		this.tiempoDisponible -= tiempo;
-	}
+    public int getCostoTotal() {
+        int costoTotal = 0;
 
-	public void reducirDinero(int dinero) {
-		this.dineroDisponible -= dinero;
-	}
+        for (Oferta oferta : itinerario) {
+            costoTotal += oferta.getCosto();
+        }
 
+        return costoTotal;
+    }
+
+    public void reducirTiempo(double tiempo) {
+        this.tiempoDisponible -= tiempo;
+    }
+
+    public void reducirDinero(int dinero) {
+        this.dineroDisponible -= dinero;
+    }
+
+    public void ordenarItenerario(OfertaComparator ofertaComparator) {
+        this.itinerario.sort(ofertaComparator);
+    }
 }

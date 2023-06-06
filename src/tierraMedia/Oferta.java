@@ -53,7 +53,5 @@ public abstract class Oferta {
 	}
 
 	@Override
-	public String toString() {
-		return "Oferta [tipo=" + tipo + ", costo=" + costo + ", tiempo=" + tiempo + "]";
-	}
+	public abstract String toString();
 }
