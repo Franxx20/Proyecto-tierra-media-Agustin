@@ -81,8 +81,8 @@ public abstract class Promocion extends Oferta {
     public String getNombre() {
         String nombres = "";
 
-        for (Atraccion a:
-             this.atracciones) {
+        for (Atraccion a :
+                this.atracciones) {
             nombres += a.getNombre() + ", ";
         }
 
@@ -109,7 +109,6 @@ public abstract class Promocion extends Oferta {
         return Objects.equals(atracciones, other.atracciones) && costoOriginal == other.costoOriginal
                 && valor == other.valor;
     }
-
 
 
     @Override

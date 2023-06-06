@@ -4,17 +4,12 @@ import java.nio.file.attribute.UserDefinedFileAttributeView;
 import java.util.*;
 
 public class GeneradorDeSegurencias {
-
-    private final String nombreArchivoUsuarios;
-    private final String nombreArchivoAtracciones;
-    private final String nombreArchivoPromociones;
     private List<Oferta> listaDeOfertas;
     private List<Usuario> listaDeUsuarios;
 
-    public GeneradorDeSegurencias(String archivoUsuarios, String archivoAtracciones, String archivoPromociones) {
-        this.nombreArchivoUsuarios = archivoUsuarios;
-        this.nombreArchivoAtracciones = archivoAtracciones;
-        this.nombreArchivoPromociones = archivoPromociones;
+    public GeneradorDeSegurencias(List<Oferta> listaDeOfertas, List<Usuario> listaDeUsuarios) {
+        this.listaDeUsuarios = listaDeUsuarios;
+        this.listaDeOfertas = listaDeOfertas;
     }
 
     public void generarSugerencias() {
@@ -28,7 +23,7 @@ public class GeneradorDeSegurencias {
             listaDeOfertas.sort(new OfertaComparator(usuario.getPreferencia()));
             System.out.println("Bienvenido/a " + usuario.getNombre() + "\n");
 
-            while(tieneDineroYTiempo) {
+            while (tieneDineroYTiempo) {
 
                 tieneDineroYTiempo = false;
 
@@ -39,13 +34,13 @@ public class GeneradorDeSegurencias {
                     double tiempoNecesario = oferta.getTiempo();
                     int dineroNecesario = oferta.getCosto();
 
-                    if(tieneTiempoYDineroYNoOfertada(usuario, yaOfertado, tiempoNecesario, dineroNecesario))
+                    if (tieneTiempoYDineroYNoOfertada(usuario, yaOfertado, tiempoNecesario, dineroNecesario))
                         tieneDineroYTiempo = true;
 
-                    if(tieneTiempoYDineroYNoOfertada(usuario, yaOfertado, tiempoNecesario, dineroNecesario)
+                    if (tieneTiempoYDineroYNoOfertada(usuario, yaOfertado, tiempoNecesario, dineroNecesario)
                             && oferta.hayCupo()) {
 
-                        if(ofrecer(oferta, sc))
+                        if (ofrecer(oferta, sc))
                             aceptarOferta(ofertasYaSugeridas, usuario, oferta, tiempoNecesario, dineroNecesario);
 
                     }
@@ -60,9 +55,11 @@ public class GeneradorDeSegurencias {
             System.out.println("Itinerario de " + usuario.getNombre() + "\n");
             System.out.println(usuario.mostrarItinerario());
 
+
             tieneDineroYTiempo = true;
         }
 
+        this.guardarItinerariosDeUsuarios();
         sc.close();
 
     }
@@ -70,33 +67,32 @@ public class GeneradorDeSegurencias {
     private boolean ofrecer(Oferta oferta, Scanner sc) {
         String respuesta = new String();
         System.out.println(oferta);
-        do{
+        do {
             System.out.println("Acepta la oferta? S/N\n");
             respuesta = sc.nextLine();
 
-        }while(respuestaValida(respuesta));
+        } while (respuestaValida(respuesta));
 
         return respuestaAfirmativa(respuesta);
     }
 
     private boolean tieneTiempoYDineroYNoOfertada(Usuario usuario, boolean yaOfertado, double tiempoNecesario,
                                                   int dineroNecesario) {
-        return !yaOfertado &&  tiempoNecesario <= usuario.getTiempoDisponible() && dineroNecesario <= usuario.getDineroDisponible();
+        return !yaOfertado && tiempoNecesario <= usuario.getTiempoDisponible() && dineroNecesario <= usuario.getDineroDisponible();
     }
 
     private boolean estaOfertada(HashSet<Oferta> ofertasYaSugeridas, Oferta oferta) {
         boolean yaOfertado = false;
-        if(oferta.esPromo()) {
-            Promocion promo = (Promocion)oferta;
+        if (oferta.esPromo()) {
+            Promocion promo = (Promocion) oferta;
 
             for (Oferta atraccion : promo.atracciones) {
-                if(ofertasYaSugeridas.contains(atraccion))
+                if (ofertasYaSugeridas.contains(atraccion))
                     yaOfertado = true;
             }
 
-        }
-        else {
-            if(ofertasYaSugeridas.contains(oferta))
+        } else {
+            if (ofertasYaSugeridas.contains(oferta))
                 yaOfertado = true;
         }
         return yaOfertado;
@@ -109,14 +105,13 @@ public class GeneradorDeSegurencias {
 
         usuario.agregarAItinerario(oferta);
 
-        if(oferta.esPromo()) {
-            Promocion promo = (Promocion)oferta;
+        if (oferta.esPromo()) {
+            Promocion promo = (Promocion) oferta;
 
             for (Oferta atraccion : promo.atracciones) {
                 ofertasYaSugeridas.add(atraccion);
             }
-        }
-        else
+        } else
             ofertasYaSugeridas.add(oferta);
 
 
@@ -135,21 +130,11 @@ public class GeneradorDeSegurencias {
     }
 
     public void leerAtraccionesPromocionesYUsuarios() {
-        Archivo archivoUsuarios = new Archivo(this.nombreArchivoUsuarios);
-        Archivo archivoAtracciones = new Archivo(this.nombreArchivoAtracciones);
-        Archivo archivoPromociones = new Archivo(this.nombreArchivoPromociones);
 
-        this.listaDeUsuarios = archivoUsuarios.leerArchivoUsuario();
-        Map<String, Atraccion> mapaAtracciones = archivoAtracciones.leerArchivoAtraccion();
-        List<Promocion> listaDePromociones = archivoPromociones.leerArchivoPromocion(mapaAtracciones);
-
-        this.listaDeOfertas = new LinkedList<>();
-        this.listaDeOfertas.addAll(listaDePromociones);
-        this.listaDeOfertas.addAll(mapaAtracciones.values());
 
     }
 
-    public void guardarItinerariosDeUsuarios() {
+    private void guardarItinerariosDeUsuarios() {
 
         for (Usuario u : this.listaDeUsuarios) {
             Archivo archivoSalida = new Archivo(u.getNombre());
@@ -158,7 +143,6 @@ public class GeneradorDeSegurencias {
         }
 
     }
-
 
 
 }
