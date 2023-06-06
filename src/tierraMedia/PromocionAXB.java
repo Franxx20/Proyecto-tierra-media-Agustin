@@ -4,7 +4,7 @@ import java.util.List;
 
 public class PromocionAXB extends Promocion{
 
-	public PromocionAXB(List<Oferta> atracciones, int lugarADescontar) {
+	public PromocionAXB(List<Atraccion> atracciones, int lugarADescontar) {
 		super(atracciones, lugarADescontar);
 	}
 
@@ -14,5 +14,21 @@ public class PromocionAXB extends Promocion{
 		}
 		Oferta a = this.atracciones.get(this.valor-1);
 		return this.costoOriginal - a.costo;
+	}
+
+	@Override
+	public int hashCode() {
+		return super.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		return true;
 	}
 }

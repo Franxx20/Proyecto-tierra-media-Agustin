@@ -5,6 +5,8 @@ import java.util.Scanner;
 import java.util.Locale;
 import java.util.Map;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -12,7 +14,6 @@ public class Archivo {
     private static final String EXTENSION = ".in";
     private static final String PATH = "archivos/in/";
     final private String nombre;
-
 
     public Archivo(String nombre) {
         this.nombre = nombre;
@@ -42,8 +43,9 @@ public class Archivo {
             scanner.useLocale(Locale.ENGLISH);
             while (scanner.hasNextLine()) {
                 String nombreAtraccion = scanner.next().replace('-', ' ');
-                mapaDeAtracciones.put(nombreAtraccion, new Atraccion(nombreAtraccion, scanner.nextInt(), scanner.nextDouble(),
-                        scanner.nextInt(), TipoDeAtraccion.valueOf(scanner.next().toUpperCase())));
+                mapaDeAtracciones.put(nombreAtraccion,
+                        new Atraccion(nombreAtraccion, scanner.nextInt(), scanner.nextDouble(), scanner.nextInt(),
+                                TipoDeAtraccion.valueOf(scanner.next().toUpperCase())));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -62,7 +64,7 @@ public class Archivo {
                 int j = 0;
                 TipoDePromocion tipo = TipoDePromocion.valueOf(campos[j++]);
                 int valor = Integer.parseInt(campos[j++]);
-                List<Oferta> atraccionPromo = new ArrayList<>();
+                List<Atraccion> atraccionPromo = new ArrayList<>();
                 while (j < campos.length) {
                     String nombreAtraccion = campos[j++].replace('-', ' ');
                     atraccionPromo.add(atraccion.get(nombreAtraccion));
@@ -82,7 +84,21 @@ public class Archivo {
         return listaDePromociones;
     }
 
-    public void guardarArchivo(List<Oferta> listaDeOfertas) {
-        // TODO
+    public void guardarArchivo(List<Usuario> listaDeUsuarios) {
+
+        File fileName = new File("archivos/out/" + this.nombre + ".out");
+        try (PrintWriter printer = new PrintWriter(fileName)) {
+
+            for (Usuario usuario : listaDeUsuarios) {
+                printer.println(usuario.getNombre() + " " + usuario.getPreferencia()+ "\n");
+                printer.println();
+            }
+
+        }
+
+        catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 }
+

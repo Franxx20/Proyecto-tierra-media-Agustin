@@ -1,13 +1,15 @@
 package tierraMedia;
 
 import java.util.List;
+import java.util.Objects;
 
 public abstract class Promocion extends Oferta {
-	protected List<Oferta> atracciones;
+
+	protected List<Atraccion> atracciones;
 	protected int costoOriginal;
 	protected int valor;
 
-	protected Promocion(List<Oferta> atracciones, int valor) {
+	protected Promocion(List<Atraccion> atracciones, int valor) {
 		super();
 		this.valor = valor;
 		this.atracciones = atracciones;
@@ -21,7 +23,7 @@ public abstract class Promocion extends Oferta {
 
 	private int calcularCostoOriginal() {
 		int costoTotal = 0;
-		for (Oferta a : this.atracciones) {
+		for (Atraccion a : this.atracciones) {
 			costoTotal += a.getCosto();
 		}
 		return costoTotal;
@@ -29,7 +31,7 @@ public abstract class Promocion extends Oferta {
 
 	private double calcularTiempo() {
 		double tiempoTotal = 0;
-		for (Oferta a : this.atracciones) {
+		for (Atraccion a : this.atracciones) {
 			tiempoTotal += a.getTiempo();
 		}
 		return tiempoTotal;
@@ -50,7 +52,7 @@ public abstract class Promocion extends Oferta {
 	}
 
 	public void reducirCupo() {
-		for (Oferta a : this.atracciones) {
+		for (Atraccion a : this.atracciones) {
 			a.reducirCupo();
 		}
 	}
@@ -68,7 +70,7 @@ public abstract class Promocion extends Oferta {
 	@Override
 	public boolean hayCupo() {
 		boolean ban = true;
-		for (Oferta a : this.atracciones) {
+		for (Atraccion a : this.atracciones) {
 			if (!a.hayCupo())
 				ban = false;
 		}
@@ -79,4 +81,31 @@ public abstract class Promocion extends Oferta {
 	public String getNombre() {
 		return this.atracciones.toString();
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + Objects.hash(atracciones, costoOriginal, valor);
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Promocion other = (Promocion) obj;
+		return Objects.equals(atracciones, other.atracciones) && costoOriginal == other.costoOriginal
+				&& valor == other.valor;
+	}
+
+	@Override
+	public String toString() {
+		return "Promocion [atracciones=" + atracciones + ", costoOriginal=" + costoOriginal + ", valor=" + valor + "]\n";
+	}
+
 }
