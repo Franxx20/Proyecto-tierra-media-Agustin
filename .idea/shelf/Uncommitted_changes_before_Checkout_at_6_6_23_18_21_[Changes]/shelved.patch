@@ -1,0 +1,46 @@
+Index: .idea/sonarlint/issuestore/index.pb
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>\nT\n$src/tierraMedia/TipoDePromocion.java\u0012,b\\d\\bd478fcdfcd590f7998a2c78eca942b5f58dd17d\nT\n$src/tierraMedia/TipoDeAtraccion.java\u0012,8\\6\\86b97997bd5d43094497026aae3d27eb61f4fabf\nU\n%src/tierraMedia/OfertaComparator.java\u0012,7\\a\\7aab27f8cd8edcaccdf441bda0ce7eb74ad08e74\nQ\n!src/tierraMedia/PromocionAXB.java\u0012,0\\8\\0831d7ef5a9c18912df982738a7d3f5011e09054\nX\n(src/tierraMedia/PromocionPorcentual.java\u0012,8\\a\\8a6b81b0d1f118a356cb873ddb03a0d00217d532
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/sonarlint/issuestore/index.pb b/.idea/sonarlint/issuestore/index.pb
+--- a/.idea/sonarlint/issuestore/index.pb	(revision 28d5ac7916bec211b8288061dc0c16fa9217bbc3)
++++ b/.idea/sonarlint/issuestore/index.pb	(date 1686086438270)
+@@ -1,11 +1,0 @@
+-
+-T
+-$src/tierraMedia/TipoDePromocion.java,b\d\bd478fcdfcd590f7998a2c78eca942b5f58dd17d
+-T
+-$src/tierraMedia/TipoDeAtraccion.java,8\6\86b97997bd5d43094497026aae3d27eb61f4fabf
+-U
+-%src/tierraMedia/OfertaComparator.java,7\a\7aab27f8cd8edcaccdf441bda0ce7eb74ad08e74
+-Q
+-!src/tierraMedia/PromocionAXB.java,0\8\0831d7ef5a9c18912df982738a7d3f5011e09054
+-X
+-(src/tierraMedia/PromocionPorcentual.java,8\a\8a6b81b0d1f118a356cb873ddb03a0d00217d532
+\ No newline at end of file
+Index: .idea/sonarlint/securityhotspotstore/index.pb
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>\nT\n$src/tierraMedia/TipoDeAtraccion.java\u0012,8\\6\\86b97997bd5d43094497026aae3d27eb61f4fabf\nT\n$src/tierraMedia/TipoDePromocion.java\u0012,b\\d\\bd478fcdfcd590f7998a2c78eca942b5f58dd17d\nU\n%src/tierraMedia/OfertaComparator.java\u0012,7\\a\\7aab27f8cd8edcaccdf441bda0ce7eb74ad08e74\nX\n(src/tierraMedia/PromocionPorcentual.java\u0012,8\\a\\8a6b81b0d1f118a356cb873ddb03a0d00217d532\nQ\n!src/tierraMedia/PromocionAXB.java\u0012,0\\8\\0831d7ef5a9c18912df982738a7d3f5011e09054
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/sonarlint/securityhotspotstore/index.pb b/.idea/sonarlint/securityhotspotstore/index.pb
+--- a/.idea/sonarlint/securityhotspotstore/index.pb	(revision 28d5ac7916bec211b8288061dc0c16fa9217bbc3)
++++ b/.idea/sonarlint/securityhotspotstore/index.pb	(date 1686086438270)
+@@ -1,11 +1,0 @@
+-
+-T
+-$src/tierraMedia/TipoDeAtraccion.java,8\6\86b97997bd5d43094497026aae3d27eb61f4fabf
+-T
+-$src/tierraMedia/TipoDePromocion.java,b\d\bd478fcdfcd590f7998a2c78eca942b5f58dd17d
+-U
+-%src/tierraMedia/OfertaComparator.java,7\a\7aab27f8cd8edcaccdf441bda0ce7eb74ad08e74
+-X
+-(src/tierraMedia/PromocionPorcentual.java,8\a\8a6b81b0d1f118a356cb873ddb03a0d00217d532
+-Q
+-!src/tierraMedia/PromocionAXB.java,0\8\0831d7ef5a9c18912df982738a7d3f5011e09054
+\ No newline at end of file

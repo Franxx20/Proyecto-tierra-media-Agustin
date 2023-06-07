@@ -1,0 +1,178 @@
+Index: src/tierraMedia/GeneradorDeSegurencias.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package tierraMedia;\n\nimport java.util.LinkedList;\nimport java.util.List;\nimport java.util.Map;\nimport java.io.File;\nimport java.io.FileNotFoundException;\nimport java.io.PrintWriter;\nimport java.util.Collections;\nimport java.util.HashSet;\n\nimport java.util.Scanner;\n\npublic class GeneradorDeSegurencias {\n\n    private final String nombreArchivoUsuarios;\n    private final String nombreArchivoAtracciones;\n    private final String nombreArchivoPromociones;\n    private List<Oferta> listaDeOfertas;\n    private List<Usuario> listaDeUsuarios;\n\n    public GeneradorDeSegurencias(String archivoUsuarios, String archivoAtracciones, String archivoPromociones) {\n        this.nombreArchivoUsuarios = archivoUsuarios;\n        this.nombreArchivoAtracciones = archivoAtracciones;\n        this.nombreArchivoPromociones = archivoPromociones;\n    }\n\n    public void generarSugerencias() {\n\n        HashSet<Oferta> ofertasYaSugeridas = new HashSet<Oferta>();\n        Scanner sc = new Scanner(System.in);\n        boolean tieneDineroYTiempo = true;\n\n        for (Usuario usuario : listaDeUsuarios) {\n\n            listaDeOfertas.sort(new OfertaComparator(usuario.getPreferencia()));\n            System.out.println(\"Bienvenido/a \" + usuario.getNombre() + \"\\n\");\n\n            while(tieneDineroYTiempo) {\n\n                tieneDineroYTiempo = false;\n\n                for (Oferta oferta : listaDeOfertas) {\n\n                    boolean yaOfertado = estaOfertada(ofertasYaSugeridas, oferta);\n\n                    double tiempoNecesario = oferta.getTiempo();\n                    int dineroNecesario = oferta.getCosto();\n\n                    if(tieneTiempoYDineroYNoOfertada(usuario, yaOfertado, tiempoNecesario, dineroNecesario))\n                        tieneDineroYTiempo = true;\n\n                    if(tieneTiempoYDineroYNoOfertada(usuario, yaOfertado, tiempoNecesario, dineroNecesario)\n                            && oferta.hayCupo()) {\n\n                        if(ofrecer(oferta, sc))\n                            aceptarOferta(ofertasYaSugeridas, usuario, oferta, tiempoNecesario, dineroNecesario);\n\n                    }\n\n                }\n            }\n\n            ofertasYaSugeridas.clear();\n\n            System.out.println(\"Itinerario de \" + usuario.getNombre() + \"\\n\");\n            System.out.println(usuario.getItinerario());\n\n            tieneDineroYTiempo = true;\n        }\n\n        sc.close();\n\n    }\n\n    private boolean ofrecer(Oferta oferta, Scanner sc) {\n        String respuesta = new String();\n        System.out.println(oferta);\n        do{\n            System.out.println(\"Acepta la oferta? S/N\\n\");\n            respuesta = sc.nextLine();\n\n        }while(respuestaValida(respuesta));\n\n        return respuestaAfirmativa(respuesta);\n    }\n\n    private boolean tieneTiempoYDineroYNoOfertada(Usuario usuario, boolean yaOfertado, double tiempoNecesario,\n                                                  int dineroNecesario) {\n        return !yaOfertado &&  tiempoNecesario <= usuario.getTiempoDisponible() && dineroNecesario <= usuario.getDineroDisponible();\n    }\n\n    private boolean estaOfertada(HashSet<Oferta> ofertasYaSugeridas, Oferta oferta) {\n        boolean yaOfertado = false;\n        if(oferta.esPromo()) {\n            Promocion promo = (Promocion)oferta;\n\n            for (Oferta atraccion : promo.atracciones) {\n                if(ofertasYaSugeridas.contains(atraccion))\n                    yaOfertado = true;\n            }\n\n        }\n        else {\n            if(ofertasYaSugeridas.contains(oferta))\n                yaOfertado = true;\n        }\n        return yaOfertado;\n    }\n\n    private void aceptarOferta(HashSet<Oferta> ofertasYaSugeridas, Usuario usuario, Oferta oferta,\n                               double tiempoNecesario, int dineroNecesario) {\n\n        System.out.println(\"Acepto la oferta!\");\n\n        usuario.agregarAItinerario(oferta);\n\n        if(oferta.esPromo()) {\n            Promocion promo = (Promocion)oferta;\n\n            for (Oferta atraccion : promo.atracciones) {\n                ofertasYaSugeridas.add(atraccion);\n            }\n        }\n        else\n            ofertasYaSugeridas.add(oferta);\n\n\n        oferta.reducirCupo();\n        usuario.reducirDinero(dineroNecesario);\n        usuario.reducirTiempo(tiempoNecesario);\n\n    }\n\n    private boolean respuestaAfirmativa(String respuesta) {\n        return respuesta.equals(\"S\") || respuesta.equals(\"s\");\n    }\n\n    private boolean respuestaValida(String respuesta) {\n        return !respuesta.equals(\"S\") && !respuesta.equals(\"N\") && !respuesta.equals(\"s\") && !respuesta.equals(\"n\");\n    }\n\n    public void leerAtraccionesPromocionesYUsuarios() {\n        Archivo archivoUsuarios = new Archivo(this.nombreArchivoUsuarios);\n        Archivo archivoAtracciones = new Archivo(this.nombreArchivoAtracciones);\n        Archivo archivoPromociones = new Archivo(this.nombreArchivoPromociones);\n\n        this.listaDeUsuarios = archivoUsuarios.leerArchivoUsuario();\n        Map<String, Atraccion> mapaAtracciones = archivoAtracciones.leerArchivoAtraccion();\n        List<Promocion> listaDePromociones = archivoPromociones.leerArchivoPromocion(mapaAtracciones);\n\n        this.listaDeOfertas = new LinkedList<>();\n        this.listaDeOfertas.addAll(listaDePromociones);\n        this.listaDeOfertas.addAll(mapaAtracciones.values());\n\n    }\n\n    public void guardarItinerariosDeUsuarios() {\n\n        Archivo archivoFinal = new Archivo(\"SALIDA\");\n\n        archivoFinal.guardarArchivo(listaDeUsuarios);\n    }\n\n\n\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/tierraMedia/GeneradorDeSegurencias.java b/src/tierraMedia/GeneradorDeSegurencias.java
+--- a/src/tierraMedia/GeneradorDeSegurencias.java	(revision 0beb30c03b1e3a37929a30a674f080565139edf9)
++++ b/src/tierraMedia/GeneradorDeSegurencias.java	(date 1686077774006)
+@@ -27,7 +27,7 @@
+ 
+     public void generarSugerencias() {
+ 
+-        HashSet<Oferta> ofertasYaSugeridas = new HashSet<Oferta>();
++        HashSet<Oferta> ofertasYaSugeridas = new HashSet<>();
+         Scanner sc = new Scanner(System.in);
+         boolean tieneDineroYTiempo = true;
+ 
+@@ -36,7 +36,7 @@
+             listaDeOfertas.sort(new OfertaComparator(usuario.getPreferencia()));
+             System.out.println("Bienvenido/a " + usuario.getNombre() + "\n");
+ 
+-            while(tieneDineroYTiempo) {
++            while (tieneDineroYTiempo) {
+ 
+                 tieneDineroYTiempo = false;
+ 
+@@ -47,17 +47,13 @@
+                     double tiempoNecesario = oferta.getTiempo();
+                     int dineroNecesario = oferta.getCosto();
+ 
+-                    if(tieneTiempoYDineroYNoOfertada(usuario, yaOfertado, tiempoNecesario, dineroNecesario))
++                    if (tieneTiempoYDineroYNoOfertada(usuario, yaOfertado, tiempoNecesario, dineroNecesario))
+                         tieneDineroYTiempo = true;
+ 
+-                    if(tieneTiempoYDineroYNoOfertada(usuario, yaOfertado, tiempoNecesario, dineroNecesario)
+-                            && oferta.hayCupo()) {
+-
+-                        if(ofrecer(oferta, sc))
+-                            aceptarOferta(ofertasYaSugeridas, usuario, oferta, tiempoNecesario, dineroNecesario);
+-
++                    if (tieneTiempoYDineroYNoOfertada(usuario, yaOfertado, tiempoNecesario, dineroNecesario)
++                            && oferta.hayCupo() && ofrecer(oferta, sc)) {
++                        aceptarOferta(ofertasYaSugeridas, usuario, oferta, tiempoNecesario, dineroNecesario);
+                     }
+-
+                 }
+             }
+ 
+@@ -74,35 +70,34 @@
+     }
+ 
+     private boolean ofrecer(Oferta oferta, Scanner sc) {
+-        String respuesta = new String();
++        String respuesta;
+         System.out.println(oferta);
+-        do{
++        do {
+             System.out.println("Acepta la oferta? S/N\n");
+             respuesta = sc.nextLine();
+ 
+-        }while(respuestaValida(respuesta));
++        } while (respuestaValida(respuesta));
+ 
+         return respuestaAfirmativa(respuesta);
+     }
+ 
+     private boolean tieneTiempoYDineroYNoOfertada(Usuario usuario, boolean yaOfertado, double tiempoNecesario,
+                                                   int dineroNecesario) {
+-        return !yaOfertado &&  tiempoNecesario <= usuario.getTiempoDisponible() && dineroNecesario <= usuario.getDineroDisponible();
++        return !yaOfertado && tiempoNecesario <= usuario.getTiempoDisponible() && dineroNecesario <= usuario.getDineroDisponible();
+     }
+ 
+     private boolean estaOfertada(HashSet<Oferta> ofertasYaSugeridas, Oferta oferta) {
+         boolean yaOfertado = false;
+-        if(oferta.esPromo()) {
+-            Promocion promo = (Promocion)oferta;
++        if (oferta.esPromo()) {
++            Promocion promo = (Promocion) oferta;
+ 
+             for (Oferta atraccion : promo.atracciones) {
+-                if(ofertasYaSugeridas.contains(atraccion))
++                if (ofertasYaSugeridas.contains(atraccion))
+                     yaOfertado = true;
+             }
+ 
+-        }
+-        else {
+-            if(ofertasYaSugeridas.contains(oferta))
++        } else {
++            if (ofertasYaSugeridas.contains(oferta))
+                 yaOfertado = true;
+         }
+         return yaOfertado;
+@@ -115,14 +110,13 @@
+ 
+         usuario.agregarAItinerario(oferta);
+ 
+-        if(oferta.esPromo()) {
+-            Promocion promo = (Promocion)oferta;
++        if (oferta.esPromo()) {
++            Promocion promo = (Promocion) oferta;
+ 
+             for (Oferta atraccion : promo.atracciones) {
+                 ofertasYaSugeridas.add(atraccion);
+             }
+-        }
+-        else
++        } else
+             ofertasYaSugeridas.add(oferta);
+ 
+ 
+@@ -163,5 +157,4 @@
+     }
+ 
+ 
+-
+ }
+\ No newline at end of file
+Index: .idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project version=\"4\">\n  <component name=\"ProjectRootManager\" version=\"2\" languageLevel=\"JDK_20\" default=\"true\" project-jdk-name=\"JavaSE-17\" project-jdk-type=\"JavaSDK\">\n    <output url=\"file://$PROJECT_DIR$/out\" />\n  </component>\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/misc.xml b/.idea/misc.xml
+--- a/.idea/misc.xml	(revision 0beb30c03b1e3a37929a30a674f080565139edf9)
++++ b/.idea/misc.xml	(date 1686077645098)
+@@ -1,6 +1,6 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
+-  <component name="ProjectRootManager" version="2" languageLevel="JDK_20" default="true" project-jdk-name="JavaSE-17" project-jdk-type="JavaSDK">
++  <component name="ProjectRootManager" version="2" languageLevel="JDK_17" default="true" project-jdk-name="JavaSE-17" project-jdk-type="JavaSDK">
+     <output url="file://$PROJECT_DIR$/out" />
+   </component>
+ </project>
+\ No newline at end of file
+Index: src/tierraMedia/Usuario.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package tierraMedia;\n\nimport java.util.List;\nimport java.util.LinkedList;\n\npublic class Usuario {\n\tprivate final String nombre;\n\tfinal TipoDeAtraccion preferencia;\n\tprivate int tiempoDisponible;\n\tprivate double dineroDisponible;\n\tprivate List<Oferta> itinerario;\n\n\tpublic Usuario(String nombre, TipoDeAtraccion preferencia, int tiempoDisponible, double dineroDisponible) {\n\t\tthis.nombre = nombre;\n\t\tthis.preferencia = preferencia;\n\t\tthis.tiempoDisponible = tiempoDisponible;\n\t\tthis.dineroDisponible = dineroDisponible;\n\t\tthis.itinerario = new LinkedList<>();\n\t}\n\n\tpublic String getNombre() {\n\t\treturn nombre;\n\t}\n\n\t@Override\n\tpublic String toString() {\n\t\treturn \"Usuario [nombre=\" + nombre + \", preferencia=\" + preferencia + \", itinerario= \" + itinerario +\"]\\n\";\n\t}\n\n\tpublic TipoDeAtraccion getPreferencia() {\n\t\treturn preferencia;\n\t}\n\n\tpublic int getTiempoDisponible() {\n\t\treturn tiempoDisponible;\n\t}\n\n\tpublic double getDineroDisponible() {\n\t\treturn dineroDisponible;\n\t}\n\n\tpublic List<Oferta> getItinerario() {\n\t\treturn itinerario;\n\t}\n\n\tpublic void agregarAItinerario(Oferta oferta) {\n\t\tthis.itinerario.add(oferta);\n\t}\n\n\tpublic double getTiempoTotal() {\n\t\tdouble tiempoTotal = 0;\n\n\t\tfor (Oferta oferta : itinerario) {\n\t\t\ttiempoTotal += oferta.getTiempo();\n\t\t}\n\n\t\treturn tiempoTotal;\n\t}\n\n\tpublic int getCostoTotal() {\n\t\tint costoTotal = 0;\n\n\t\tfor (Oferta oferta : itinerario) {\n\t\t\tcostoTotal += oferta.getCosto();\n\t\t}\n\n\t\treturn costoTotal;\n\t}\n\n\tpublic void reducirTiempo(double tiempo) {\n\t\tthis.tiempoDisponible -= tiempo;\n\t}\n\n\tpublic void reducirDinero(int dinero) {\n\t\tthis.dineroDisponible -= dinero;\n\t}\n\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/tierraMedia/Usuario.java b/src/tierraMedia/Usuario.java
+--- a/src/tierraMedia/Usuario.java	(revision 0beb30c03b1e3a37929a30a674f080565139edf9)
++++ b/src/tierraMedia/Usuario.java	(date 1686084124168)
+@@ -4,8 +4,8 @@
+ import java.util.LinkedList;
+ 
+ public class Usuario {
+-	private final String nombre;
+ 	final TipoDeAtraccion preferencia;
++	private final String nombre;
+ 	private int tiempoDisponible;
+ 	private double dineroDisponible;
+ 	private List<Oferta> itinerario;
+Index: src/tierraMedia/PromocionAXB.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package tierraMedia;\n\nimport java.util.List;\n\npublic class PromocionAXB extends Promocion{\n\n\tpublic PromocionAXB(List<Atraccion> atracciones, int lugarADescontar) {\n\t\tsuper(atracciones, lugarADescontar);\n\t}\n\n\tprotected int calcularCosto() {\n\t\tif(this.valor < 1 || this.valor > this.atracciones.size()) {\n\t\t\tthrow new RuntimeException();\n\t\t}\n\t\tOferta a = this.atracciones.get(this.valor-1);\n\t\treturn this.costoOriginal - a.costo;\n\t}\n\n\t@Override\n\tpublic int hashCode() {\n\t\treturn super.hashCode();\n\t}\n\n\t@Override\n\tpublic boolean equals(Object obj) {\n\t\tif (this == obj)\n\t\t\treturn true;\n\t\tif (!super.equals(obj))\n\t\t\treturn false;\n\t\tif (getClass() != obj.getClass())\n\t\t\treturn false;\n\t\treturn true;\n\t}\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/tierraMedia/PromocionAXB.java b/src/tierraMedia/PromocionAXB.java
+--- a/src/tierraMedia/PromocionAXB.java	(revision 0beb30c03b1e3a37929a30a674f080565139edf9)
++++ b/src/tierraMedia/PromocionAXB.java	(date 1686077852359)
+@@ -10,7 +10,7 @@
+ 
+ 	protected int calcularCosto() {
+ 		if(this.valor < 1 || this.valor > this.atracciones.size()) {
+-			throw new RuntimeException();
++			throw new RuntimeException("El costo no puede ser negativo!");
+ 		}
+ 		Oferta a = this.atracciones.get(this.valor-1);
+ 		return this.costoOriginal - a.costo;
